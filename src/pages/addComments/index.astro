@@ -12,13 +12,18 @@ if (Astro.request.method === 'POST') {
 	const autor = formData.get('autor');
 	const completed = formData.get('complete');
 	console.log(completed);
+	let completeUpload = false;
+	if(completed === "true"){
+		completeUpload = true;
+	}
+	console.log(completeUpload);
 	
 	await db.insert(Comments).values([
 		{
 			id: null,
 			title: titulo,
 			description: comentario,
-			completed: completed,
+			completed: completeUpload,
 			authorId: autor,
 		}
 	])

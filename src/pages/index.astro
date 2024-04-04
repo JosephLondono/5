@@ -3,7 +3,16 @@ import { eq } from "astro:db";
 import { db, Authors, Comments } from "astro:db";
 
 const CommentsData = await db.select().from(Comments).innerJoin(Authors, eq(Comments.authorId, Authors.id))
-console.log(CommentsData)
+console.log(CommentsData);
+if (Astro.request.method === 'POST') {
+	// parse form data
+	const formData = await Astro.request.formData();
+	const id = formData.get('id');
+	console.log(id)
+	// delete comment
+	await db.delete(Comments).where(eq(Comments.id, id));
+	return Astro.redirect('/');
+}
 
 ---
 
@@ -31,7 +40,7 @@ console.log(CommentsData)
 								(comment.Comments.completed) ? <span class="text-green-500 dark:text-green-400">Completed</span> : <span class="text-red-500 dark:text-red-400">Not Completed</span>
 							}
 							<form method="post">
-								<input type="hidden" name="id" value={comment.Comments.title} />
+								<input type="hidden" name="id" value={comment.Comments.id} />
 								<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
 									Eliminar comentario
 								</button>
