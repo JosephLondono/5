@@ -1,6 +1,29 @@
 ---
 import { db, Authors, Comments, eq } from "astro:db";
 
+const autores = await db.select().from(Authors);
+console.log(autores);
+
+if (Astro.request.method === 'POST') {
+	// parse form data
+	const formData = await Astro.request.formData();
+	const titulo = formData.get('titulo');
+	const comentario = formData.get('comentario');
+	const autor = formData.get('autor');
+	const completed = formData.get('complete');
+	console.log(completed);
+	
+	await db.insert(Comments).values([
+		{
+			id: null,
+			title: titulo,
+			description: comentario,
+			completed: completed,
+			authorId: autor,
+		}
+	])
+	return Astro.redirect('/');
+}
 
 ---
 
@@ -26,7 +49,18 @@ import { db, Authors, Comments, eq } from "astro:db";
                 <label for="autor" class="block text-gray-700 text-sm font-bold mb-2 mt-4 dark:text-gray-400">Autor</label>
                 <select name="autor" id="autor" class="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 dark:bg-gray-900 dark:text-gray-400" required>
                     <option value="">Selecciona un autor</option>
+					{
+						autores.map((autor) => (
+							<option value={autor.id}>{autor.name}</option>
+						))
+					}
                 </select>
+				<label for="complete" class="block text-gray-700 text-sm font-bold mb-2 mt-4 dark:text-gray-400">Complete</label>
+                <select name="complete" id="complete" class="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 dark:bg-gray-900 dark:text-gray-400" required>
+					<option value="">Select any option</option>
+					<option value="true">Yes</option>
+					<option value="false">No</option>
+				</select>
                 <input type="submit" value="Submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             </form>
 		</main>

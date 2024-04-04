@@ -10,6 +10,7 @@ const Authors = defineTable({
 
 const Comments = defineTable({
   columns: { 
+    id: column.number({ primaryKey: true , autoIncrement: true }),
     title: column.text(),
     description: column.text(),
     completed: column.boolean(),

@@ -30,9 +30,16 @@ console.log(CommentsData)
 							{
 								(comment.Comments.completed) ? <span class="text-green-500 dark:text-green-400">Completed</span> : <span class="text-red-500 dark:text-red-400">Not Completed</span>
 							}
+							<form method="post">
+								<input type="hidden" name="id" value={comment.Comments.title} />
+								<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+									Eliminar comentario
+								</button>
+							</form>
 						</li>
 					))}
 				</ul>
+				
 			</section>
 		</main>
 	</body>
