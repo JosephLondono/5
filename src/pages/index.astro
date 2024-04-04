@@ -16,10 +16,11 @@ console.log(CommentsData)
 		<title>Astro</title>
 	</head>
 	<body class="text-center bg-gray-800 text-white dark:bg-gray-100 dark:text-gray-800">
-		<h1 class="text-4xl font-bold mb-4">Astro XD</h1>
+		<h1 class="text-4xl font-bold mb-4">See Comments</h1>
+		<a href="/addComments">Add Comments</a>
 		<main class="w-screen">
 			<section class="bg-white text-black shadow-md rounded p-4 m-4 dark:bg-gray-800 dark:text-white">
-				<h2 class="text-2xl font-semibold mb-2">Comentarios:</h2>
+				<h2 class="text-2xl font-semibold mb-2">Comments:</h2>
 				<ul class="mt-8 space-y-4">
 					{CommentsData.map((comment) => (
 						<li class="border p-2 rounded shadow dark:border-gray-700 dark:bg-gray-900">
@@ -27,7 +28,7 @@ console.log(CommentsData)
 							<span class="block text-gray-600 dark:text-gray-400">{comment.Comments.description}</span>
 							<p class="text-sm text-gray-500 dark:text-gray-400">Author: {comment.Authors.name}</p>
 							{
-								(comment.Comments.completed) ? <span class="text-green-500 dark:text-green-400">Completado</span> : <span class="text-red-500 dark:text-red-400">Pendiente</span>
+								(comment.Comments.completed) ? <span class="text-green-500 dark:text-green-400">Completed</span> : <span class="text-red-500 dark:text-red-400">Not Completed</span>
 							}
 						</li>
 					))}

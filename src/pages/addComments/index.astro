@@ -1,0 +1,39 @@
+---
+import { db, Authors, Comments, eq } from "astro:db";
+
+
+---
+
+<html lang="es" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro Add Comment</title>
+	</head>
+	<body class="text-center bg-gray-800 text-white dark:bg-gray-100 dark:text-gray-800">
+		<h1 class="text-4xl font-bold mb-4">Add Comments</h1>
+        <a href="/">See Comments</a>
+		<main class="w-screen">
+            <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800">
+                <label for="titulo" class="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Titulo del comentario</label>
+                <input type="text" name="titulo" id="titulo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-900 dark:text-gray-400" required />
+                
+                <label for="comentario" class="block text-gray-700 text-sm font-bold mb-2 mt-4 dark:text-gray-400">Comentario</label>
+                <textarea name="comentario" id="comentario" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-900 dark:text-gray-400 min-h-9" required></textarea>
+                
+                <label for="autor" class="block text-gray-700 text-sm font-bold mb-2 mt-4 dark:text-gray-400">Autor</label>
+                <select name="autor" id="autor" class="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 dark:bg-gray-900 dark:text-gray-400" required>
+                    <option value="">Selecciona un autor</option>
+                </select>
+                <input type="submit" value="Submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            </form>
+		</main>
+	</body>
+	<style>
+		:root{
+			color-scheme: light dark;
+		}
+	</style>
+</html>
