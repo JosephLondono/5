@@ -32,7 +32,9 @@ if (Astro.request.method === 'POST') {
 		completeUpload = true;
 	}
 	let isPublicUpload = true;
-	if(isPublic === "false"){
+	if(isPublic === "true"){
+		isPublicUpload = true;
+	} else {
 		isPublicUpload = false;
 	}
 	console.log(completeUpload);
