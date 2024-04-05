@@ -32,14 +32,14 @@ export default async function seed() {
 			description: "Buy eggs from the store",
 			completed: false,
 			userId: 1,
-			isPublic: true
+			isPublic: false
 		},
 		{
 			id: null,
 			title: "Programming App Todo",
 			description: "Programing App Todo with Astro-Auth and Astro-DB",
 			completed: false,
-			userId: 1,
+			userId: 2,
 			isPublic: false
 		}
 	])

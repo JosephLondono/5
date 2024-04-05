@@ -1,0 +1,45 @@
+---
+import { getSession } from 'auth-astro/server';
+import { db, Users, Comments, eq } from 'astro:db';
+
+const session = await getSession(Astro.request);
+
+let CommentsDataPersonal = [];
+if(session!==null){
+    const userCurrent = await db.select().from(Users).where(eq(Users.email, session.user.email));
+    console.log(userCurrent)
+    CommentsDataPersonal = await db.select().from(Comments).where(eq(Comments.userId, userCurrent[0].id)).innerJoin(Users, eq(Users.id,Comments.userId));
+	console.log(CommentsDataPersonal);
+}
+
+---
+{
+    (CommentsDataPersonal.length === 0) ? (<h3 class="text-start m-0 text-xl">No comments Personal</h3>) :
+    (
+        <h3 class="text-start m-0 text-xl">Comments Personal</h3>
+        <ul class="space-y-4">
+                {
+                    CommentsDataPersonal.map((commentPersonal) => (
+                        <li class="border p-2 rounded shadow dark:border-gray-700 dark:bg-gray-900">
+                            <h3 class="text-xl font-semibold">{ commentPersonal.Comments.title }</h3>
+                            <span class="block text-gray-600 dark:text-gray-400">{commentPersonal.Comments.description}</span>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Author: {commentPersonal.Users.name}</p>
+                                {
+                                    (commentPersonal.Comments.completed) ? <span class="text-green-500 dark:text-green-400">Completed</span> : <span class="text-red-500 dark:text-red-400">Not Completed</span>
+                                }
+                                -
+                                {
+                                    (commentPersonal.Comments.isPublic === true) ? <span class="text-green-500 dark:text-green-400">🔓</span> : <span class="text-red-500 dark:text-red-400">🔐</span>
+                                }
+                            <form method="post">
+                                <input type="hidden" name="id" value={commentPersonal.Comments.id} />
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    Eliminar comentario
+                                </button>
+                            </form>
+                        </li>
+                    ))
+                }
+            </ul>
+        )
+}

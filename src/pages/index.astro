@@ -5,16 +5,13 @@ import { getSession } from "auth-astro/server";
 
 import Header from '@/components/header.astro';
 import { sql } from "astro:db";
+import CommentsPersonal from "@/components/commentsPersonal.astro";
+import CommentsPublic from "@/components/commentsPublic.astro";
 
 const session = await getSession(Astro.request);
 console.log(session)
 
-const userCurrent = await db.select().from(Users).where(eq(Users.email, session.user.email));
 
-const CommentsDataPersonal = await db.select().from(Comments).where(eq(Users.id, userCurrent[0].id)).innerJoin(Users, eq(Comments.userId, Users.id))
-console.log(CommentsDataPersonal);
-
-const CommentsDataPublic = await db.select().from(Comments).where(sql`not ${Users.id} = ${userCurrent[0].id} and ${Comments.isPublic} = true`).innerJoin(Users, eq(Comments.userId, Users.id))
 
 if (Astro.request.method === 'POST') {
 	// parse form data
@@ -41,46 +38,13 @@ if (Astro.request.method === 'POST') {
 		<main class="w-screen">
 			<section class="bg-white text-black shadow-md rounded p-4 m-4 dark:bg-gray-800 dark:text-white">
 				<Header title="See" hrefText="Add"/>
-				<h3 class="text-start m-0 text-xl">Comments Personal</h3>
-				<ul class="space-y-4">
-					{CommentsDataPersonal.map((commentPersonal) => (
-						<li class="border p-2 rounded shadow dark:border-gray-700 dark:bg-gray-900">
-							<h3 class="text-xl font-semibold">{ commentPersonal.Comments.title }</h3>
-							<span class="block text-gray-600 dark:text-gray-400">{commentPersonal.Comments.description}</span>
-							<p class="text-sm text-gray-500 dark:text-gray-400">Author: {commentPersonal.Users.name}</p>
-							{
-								(commentPersonal.Comments.completed) ? <span class="text-green-500 dark:text-green-400">Completed</span> : <span class="text-red-500 dark:text-red-400">Not Completed</span>
-							}
-							-
-							{
-								(commentPersonal.Comments.isPublic === true) ? <span class="text-green-500 dark:text-green-400">🔓</span> : <span class="text-red-500 dark:text-red-400">🔐</span>
-							}
-							<form method="post">
-								<input type="hidden" name="id" value={commentPersonal.Comments.id} />
-								<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-									Eliminar comentario
-								</button>
-							</form>
-						</li>
-					))}
-				</ul>
-				<h3 class="text-start m-0 text-xl">Comments Public</h3>
-				<ul class="space-y-4">
-					{CommentsDataPublic.map((commentPublic) => (
-						<li class="border p-2 rounded shadow dark:border-gray-700 dark:bg-gray-900">
-							<h3 class="text-xl font-semibold">{ commentPublic.Comments.title }</h3>
-							<span class="block text-gray-600 dark:text-gray-400">{commentPublic.Comments.description}</span>
-							<p class="text-sm text-gray-500 dark:text-gray-400">Author: {commentPublic.Users.name}</p>
-							{
-								(commentPublic.Comments.completed) ? <span class="text-green-500 dark:text-green-400">Completed</span> : <span class="text-red-500 dark:text-red-400">Not Completed</span>
-							}
-							-
-							{
-								(commentPublic.Comments.isPublic === true) ? <span class="text-green-500 dark:text-green-400">🔓</span> : <span class="text-red-500 dark:text-red-400">🔐</span>
-							}
-						</li>
-					))}
-				</ul>
+				{
+					(session) ? 
+					<CommentsPersonal />
+					<CommentsPublic />
+					:
+					<p>Debes iniciar sesión para ver los comentarios</p>
+				}
 			</section>
 		</main>
 	</body>
