@@ -6,8 +6,10 @@ import { getSession } from "auth-astro/server";
 const session = await getSession(Astro.request);
 console.log(session);
 
+let usuariosData = [];
+
 if(session !== null){
-	const usuariosData = await db.select().from(Users).where(eq(Users.email, session.user.email));
+	usuariosData = await db.select().from(Users).where(eq(Users.email, session.user.email));
 	console.log(usuariosData);
 } else {
 	return Astro.redirect('/');
