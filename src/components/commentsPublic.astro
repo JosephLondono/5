@@ -13,7 +13,7 @@ if(session!==null){
     CommentsDataPublic = await db.select().from(Comments).where(and(
         ne(Comments.userId, userCurrent[0].id), 
         eq(Comments.isPublic, true)
-    )).innerJoin(Users, eq(Comments.userId, userCurrent[0].id));
+    )).innerJoin(Users, eq(Comments.userId, Users.id));
 	console.log(CommentsDataPublic)
 
 }
@@ -27,11 +27,11 @@ if(session!==null){
                 {
                     CommentsDataPublic.map((commentsPublic) => (
                         <li class="border p-2 rounded shadow dark:border-gray-700 dark:bg-gray-900">
-                            <h3 class="text-xl font-semibold">{ commentsPublic.title }</h3>
-                            <span class="block text-gray-600 dark:text-gray-400">{commentsPublic.description}</span>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Author: {commentsPublic.name}</p>
+                            <h3 class="text-xl font-semibold">{ commentsPublic.Comments.title }</h3>
+                            <span class="block text-gray-600 dark:text-gray-400">{commentsPublic.Comments.description}</span>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Author: {commentsPublic.Users.name}</p>
                                 {
-                                    (commentsPublic.completed) ? <span class="text-green-500 dark:text-green-400">Completed</span> : <span class="text-red-500 dark:text-red-400">Not Completed</span>
+                                    (commentsPublic.Comments.completed) ? <span class="text-green-500 dark:text-green-400">Completed</span> : <span class="text-red-500 dark:text-red-400">Not Completed</span>
                                 }
                         </li>
                     ))
