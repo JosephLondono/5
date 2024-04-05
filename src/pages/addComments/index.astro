@@ -9,7 +9,8 @@ console.log(session);
 if(session !== null){
 	const usuariosData = await db.select().from(Users).where(eq(Users.email, session.user.email));
 	console.log(usuariosData);
-
+} else {
+	return Astro.redirect('/');
 }
 
 
