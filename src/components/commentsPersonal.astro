@@ -14,9 +14,12 @@ if(session!==null){
 
 ---
 {
-    (CommentsDataPersonal.length === 0) ? (<h3 class="text-start m-0 text-xl">No comments Personal</h3>) :
+    (CommentsDataPersonal.length === 0) ? (
+        <h3 class="text-center md:text-start m-0 text-xl">No comments Personal</h3>
+    ) 
+    :
     (
-        <h3 class="text-start m-0 text-xl">Comments Personal</h3>
+        <h3 class="text-center md:text-start m-0 text-xl">Comments Personal</h3>
         <ul class="space-y-4">
                 {
                     CommentsDataPersonal.map((commentPersonal) => (

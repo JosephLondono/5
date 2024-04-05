@@ -20,9 +20,13 @@ if(session!==null){
 
 ---
 {
-    (CommentsDataPublic.length === 0) ? (<h3 class="text-start m-0 text-xl">No comments Public</h3>) :
+    (CommentsDataPublic.length === 0) ? 
     (
-        <h3 class="text-start m-0 text-xl">Comments Public</h3>
+        <h3 class="text-center m-0 text-xl">No comments Public</h3>
+    ) 
+    :
+    (
+        <h3 class="text-center m-0 text-xl md:text-start">Comments Public</h3>
         <ul class="space-y-4">
                 {
                     CommentsDataPublic.map((commentsPublic) => (
