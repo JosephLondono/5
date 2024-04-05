@@ -13,7 +13,7 @@ if(session!==null){
     CommentsDataPublic = await db.select().from(Comments).where(and(
         ne(Comments.userId, userCurrent[0].id), 
         eq(Comments.isPublic, true)
-    ));
+    )).innerJoin(Users, eq(Comments.userId, userCurrent[0].id));
 	console.log(CommentsDataPublic)
 
 }
