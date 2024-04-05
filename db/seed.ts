@@ -1,36 +1,46 @@
-import { db, Authors, Comments } from 'astro:db';
+import { db, Users, Comments } from 'astro:db';
 
 // https://astro.build/db/seed
 export default async function seed() {
 	// TODO
 
-	await db.insert(Authors).values([
+	await db.insert(Users).values([
 		{
-			name: 'Alice',
+			id: null,
+			name: 'Joseph Londoño',
+			email: "joal1808@gmail.com",
 		},
 		{
-			name: 'Bob',
+			id: null,
+			name: 'Joseph Londoño',
+			email: "londonoj888@gmail.com",
 		}
 	])
 
 	await db.insert(Comments).values([
 		{
+			id: null,
 			title: "Buy milk",
 			description: "Buy milk from the store",
 			completed: false,
-			authorId: 1
+			userId: 1,
+			isPublic: true
 		},
 		{
+			id: null,
 			title: "Buy eggs",
 			description: "Buy eggs from the store",
 			completed: false,
-			authorId: 1
+			userId: 1,
+			isPublic: true
 		},
 		{
-			title: "Buy bread",
-			description: "Buy bread from the store",
+			id: null,
+			title: "Programming App Todo",
+			description: "Programing App Todo with Astro-Auth and Astro-DB",
 			completed: false,
-			authorId: 2
+			userId: 1,
+			isPublic: false
 		}
 	])
 }

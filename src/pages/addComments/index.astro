@@ -1,30 +1,44 @@
 ---
-import { db, Authors, Comments, eq } from "astro:db";
+import { db, Users, Comments, eq } from "astro:db";
+import Header from "@/components/header.astro";
+import { getSession } from "auth-astro/server";
 
-const autores = await db.select().from(Authors);
-console.log(autores);
+const session = await getSession(Astro.request);
+console.log(session);
+
+const usuariosData = await db.select().from(Users).where(eq(Users.email, session.user.email));
+console.log(usuariosData);
+
+
 
 if (Astro.request.method === 'POST') {
 	// parse form data
 	const formData = await Astro.request.formData();
 	const titulo = formData.get('titulo');
 	const comentario = formData.get('comentario');
-	const autor = formData.get('autor');
+	const usuario = usuariosData[0].id;
 	const completed = formData.get('complete');
+	const isPublic = formData.get('isPublic');
 	console.log(completed);
 	let completeUpload = false;
 	if(completed === "true"){
 		completeUpload = true;
 	}
+	let isPublicUpload = true;
+	if(isPublic === "false"){
+		isPublicUpload = false;
+	}
 	console.log(completeUpload);
 	
+	console.log(usuario)
 	await db.insert(Comments).values([
 		{
 			id: null,
 			title: titulo,
 			description: comentario,
 			completed: completeUpload,
-			authorId: autor,
+			userId: usuario,
+			isPublic: isPublicUpload
 		}
 	])
 	return Astro.redirect('/');
@@ -41,25 +55,22 @@ if (Astro.request.method === 'POST') {
 		<title>Astro Add Comment</title>
 	</head>
 	<body class="text-center bg-gray-800 text-white dark:bg-gray-100 dark:text-gray-800">
-		<h1 class="text-4xl font-bold mb-4">Add Comments</h1>
-        <a href="/">See Comments</a>
-		<main class="w-screen">
-            <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 dark:bg-gray-800">
+		<main class="bg-white text-black shadow-md rounded p-4 m-4 dark:bg-gray-800 dark:text-white">
+		<Header title="Add" hrefText="See"/>
+			<form method="post">
                 <label for="titulo" class="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-400">Titulo del comentario</label>
                 <input type="text" name="titulo" id="titulo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-900 dark:text-gray-400" required />
                 
                 <label for="comentario" class="block text-gray-700 text-sm font-bold mb-2 mt-4 dark:text-gray-400">Comentario</label>
                 <textarea name="comentario" id="comentario" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-900 dark:text-gray-400 min-h-9" required></textarea>
-                
-                <label for="autor" class="block text-gray-700 text-sm font-bold mb-2 mt-4 dark:text-gray-400">Autor</label>
-                <select name="autor" id="autor" class="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 dark:bg-gray-900 dark:text-gray-400" required>
-                    <option value="">Selecciona un autor</option>
-					{
-						autores.map((autor) => (
-							<option value={autor.id}>{autor.name}</option>
-						))
-					}
-                </select>
+
+				<label for="isPublic" class="block text-gray-700 text-sm font-bold mb-2 mt-4 dark:text-gray-400">Public</label>
+                <select name="public" id="isPublic" class="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 dark:bg-gray-900 dark:text-gray-400" required>
+					<option value="">Select any option</option>
+					<option value="true">Yes</option>
+					<option value="false">No</option>
+				</select>
+
 				<label for="complete" class="block text-gray-700 text-sm font-bold mb-2 mt-4 dark:text-gray-400">Complete</label>
                 <select name="complete" id="complete" class="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 dark:bg-gray-900 dark:text-gray-400" required>
 					<option value="">Select any option</option>

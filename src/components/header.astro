@@ -1,0 +1,60 @@
+--- 
+import { SignIn, SignOut } from "auth-astro/components"
+import { getSession } from "auth-astro/server";
+import { db, Users } from "astro:db";
+import { eq } from "astro:db";
+
+interface Props {
+    title: string;
+    hrefText: string;
+}
+
+const { title, hrefText } = Astro.props;
+
+
+const session = await getSession(Astro.request);
+
+console.log(session);
+
+if(session!==null){
+    const userDB = await db.select().from(Users).where(eq(Users.email, session.user.email));
+    console.log(userDB);
+    if(userDB.length == 0){
+        await db.insert(Users).values({
+            id: null,
+            email: session.user.email,
+            name: session.user.name
+        });
+    }
+}
+
+
+let href
+if(hrefText.toLocaleLowerCase() == "add"){
+    href = "/addComments"
+} else {
+    href = "/"
+}
+---
+
+<header class="flex justify-between items-center text-white">
+    <div>
+        <h1 class="text-4xl font-bold mb-4">{title} Comments</h1>
+    </div>
+    <div class="flex gap-5">
+        <a href={href} class="bg-blue-400/40 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{hrefText} Comments</a>
+        {
+            (session) ? 
+            <SignOut class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Sign Out
+            </SignOut>
+            <img src={session.user.image} width="40" class="rounded-full">
+            :
+            <SignIn class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            provider="google"
+            >
+                Sign In
+            </SignIn>
+        }
+    </div>
+</header>

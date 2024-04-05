@@ -1,10 +1,11 @@
 import { column, defineDb, defineTable } from 'astro:db';
 
 // https://astro.build/db/config
-const Authors = defineTable({
+const Users = defineTable({
   columns: {
     id: column.number({ primaryKey: true , autoIncrement: true }),
     name: column.text(),
+    email: column.text(),
   }
 })
 
@@ -14,11 +15,12 @@ const Comments = defineTable({
     title: column.text(),
     description: column.text(),
     completed: column.boolean(),
-    authorId: column.number({ references: () => Authors.columns.id }),
+    userId: column.number({ references: () => Users.columns.id }),
+    isPublic: column.boolean({ default: true })
   }
 })
 
 
 export default defineDb({
-  tables: { Authors , Comments }
+  tables: { Users , Comments }
 });
