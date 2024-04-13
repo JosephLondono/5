@@ -1,10 +1,8 @@
 ---
-import { eq } from "astro:db";
-import { db, Users, Comments } from "astro:db";
+import { db, Users, Comments, eq } from "astro:db";
 import { getSession } from "auth-astro/server";
 
 import Header from '@/components/header.astro';
-import { sql } from "astro:db";
 import CommentsPersonal from "@/components/commentsPersonal.astro";
 import CommentsPublic from "@/components/commentsPublic.astro";
 
