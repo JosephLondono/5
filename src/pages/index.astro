@@ -16,7 +16,7 @@ console.log(session)
 if (Astro.request.method === 'POST') {
 	// parse form data
 	const formData = await Astro.request.formData();
-	const id = formData.get('id');
+	const id = formData.get('id')
 	console.log(id)
 	// delete comment
 	await db.delete(Comments).where(eq(Comments.id, id));
